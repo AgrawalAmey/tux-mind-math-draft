@@ -181,7 +181,6 @@ function pacmanGame() {
 		};
 
 		this.nextLevel = function() {
-			console.log("Hello");
 			this.level++;
 			game.showMessage("Level "+game.level, this.getLevelTitle() + "<br/>(Click to continue!)");
 			game.refreshLevel(".level");
@@ -283,6 +282,10 @@ function pacmanGame() {
 			if( state === 0 ) {
                 this.timer.reset();
 			}
+			//Clear GhostMode		
+			game.ghostMode = 0;			// 0 = Scatter, 1 = Chase
+			game.ghostModeTimer = 200;	// decrements each animationLoop execution
+			game.buildWalls();
 			// get Level Map
 			$.ajax({
 				url: mapConfig,
@@ -318,6 +321,16 @@ function pacmanGame() {
 			
 			this.pillCount = temp;
 
+			if (state === 0) {
+				this.score.set(0);
+				this.score.refresh(".score");
+				pacman.lives = 3;
+				game.level = 0;
+				this.refreshLevel(".level");
+				game.gameOver = false;
+				this.clearQuestion();
+			}
+
 			game.populateSvgData();
 			
 			// initalize Ghosts, avoid memory flooding
@@ -337,28 +350,18 @@ function pacmanGame() {
 			inky.start();
 			pinky.start();
 			clyde.start();
-	
-			if (state === 0) {
-				this.score.set(0);
-				this.score.refresh(".score");
-				pacman.lives = 3;
-				game.level = 0;
-				this.refreshLevel(".level");
-				game.gameOver = false;
-				pinky.dead=false;
-				inky.dead=false;
-				blinky.dead=false;
-				clyde.dead=false;
-			}
+
 			pacman.reset();
+
+			pinky.dead=false;
+			inky.dead=false;
+			blinky.dead=false;
+			clyde.dead=false;
 			
 			game.drawHearts(pacman.lives);	
-			
-			this.ghostMode = 0;			// 0 = Scatter, 1 = Chase
-			this.ghostModeTimer = 200;	// decrements each animationLoop execution
 		};
 
-		this.allGostDead=function(){
+		this.allGhostDead=function(){
 			if(	pinky.dead &&
 				inky.dead &&
 				blinky.dead &&
@@ -368,7 +371,7 @@ function pacmanGame() {
 		}
 
 		this.check = function() {
-		if ((this.pillCount === 0 || game.allGostDead()) && game.running) {
+		if (game.allGhostDead() && game.running) {
 				this.nextLevel();
 			}
 		};
@@ -529,20 +532,23 @@ function pacmanGame() {
         this.dead = false;
 		this.direction = right;
 		this.radius = pacman.radius;
-		switch (this.name) {
-			case "pinky":
-				this.number= game.question.que[game.level][0].answer;
-				break;
-			case "blinky":
-				this.number= game.question.que[game.level][1].answer;
-				break;
-			case "inky":
-				this.number= game.question.que[game.level][2].answer;
-				break;
-			case "clyde":
-				this.number= game.question.que[game.level][3].answer;
-				break;
+		this.setNumber= function(){
+			switch (this.name) {
+				case "pinky":
+					this.number= game.question.que[game.level][0].answer;
+					break;
+				case "blinky":
+					this.number= game.question.que[game.level][1].answer;
+					break;
+				case "inky":
+					this.number= game.question.que[game.level][2].answer;
+					break;
+				case "clyde":
+					this.number= game.question.que[game.level][3].answer;
+					break;
+			}		
 		}
+		this.setNumber();
 		this.draw = function (context) {					
 			if (!this.dead) {
 				context.drawImage(this.image, this.posX, this.posY, 2*this.radius, 2*this.radius);
@@ -559,6 +565,7 @@ function pacmanGame() {
 			this.posX = this.startPosX;
 			this.posY = this.startPosY;
 			this.ghostHouse = true;
+			this.setNumber();
 		}
 		
 		this.die = function() {
@@ -604,17 +611,17 @@ function pacmanGame() {
 			}
 		}
 			
-		this.checkCollision = function() {  
+		this.checkCollision = function() { 
 			/* Check Back to Home */
-			if (this.dead && (this.getGridPosX() == this.startPosX /30) && (this.getGridPosY() == this.startPosY / 30)) this.reset();
-			else {
-				/* Check Ghost / Pacman Collision			*/
+			if (this.dead && (this.getGridPosX() == this.startPosX /30) && (this.getGridPosY() == this.startPosY / 30)) this.reset(); 
+			else{
+				/* Check Ghost / Pacman Collision*/
 				if ((between(pacman.getCenterX(), this.getCenterX()-10, this.getCenterX()+10)) 
 					&& (between(pacman.getCenterY(), this.getCenterY()-10, this.getCenterY()+10)))
 				{
 					if (!this.dead) {
 						if(game.currentQuestion){
-							if(!(this.number==game.currentQuestion.answer)){
+							if(this.number!=game.currentQuestion.answer){
 								pacman.die();	
 							}else{
 								this.die();
@@ -639,16 +646,13 @@ function pacmanGame() {
 			var u, d, r, l; 			// option up, down, right, left
 			
 			// get target
-			if (this.dead) {			// go Home
-				// var tX = this.startPosX / 30;
-				// var tY = this.startPosY / 30;
-			}
-			else if (game.ghostMode == 0) {			// Scatter Mode
+			if (game.ghostMode == 0) {			// Scatter Mode
 				var tX = this.gridBaseX;
 				var tY = this.gridBaseY;
 			} else if (game.ghostMode == 1) {			// Chase Mode
 
 				switch (this.name) {
+				
 				// target: 4 ahead and 4 left of pacman
 				case "pinky":
 					var pdir = pacman.direction;
@@ -686,6 +690,7 @@ function pacmanGame() {
 						tY = this.gridBaseY;
 					}
 					break;
+				
 				}
 			}	
 			
@@ -721,21 +726,12 @@ function pacmanGame() {
 			
 			var r = this.dir;
 			var j;
-			
-			if (this.dead) {
-				// for (var i = dirs2.length-1; i >= 0; i--) {
-				// 	if ((dirs2[i].field != "wall") && !(dirs2[i].dir.equals(this.getOppositeDirection()))) {
-				// 	r = dirs2[i].dir;
-				// 	}
-				// }
-			}
-			else {
-				for (var i = dirs2.length-1; i >= 0; i--) {
-					if ((dirs2[i].field != "wall") && (dirs2[i].field != "door") && !(dirs2[i].dir.equals(this.getOppositeDirection()))) {
-						r = dirs2[i].dir;
-						}
-				}		
-			}
+
+			for (var i = dirs2.length-1; i >= 0; i--) {
+				if ((dirs2[i].field != "wall") && (dirs2[i].field != "door") && !(dirs2[i].dir.equals(this.getOppositeDirection()))) {
+					r = dirs2[i].dir;
+					}
+			}		
 			this.directionWatcher.set(r);
 			return r;
 		}
@@ -1013,16 +1009,15 @@ function pacmanGame() {
 		}
 		this.dieFinal = function() {
 			this.reset();
-			pinky.reset(0);
-			inky.reset(0);
-			blinky.reset(0);
-			clyde.reset(0);
+			pinky.reset();
+			inky.reset();
+			blinky.reset();
+			clyde.reset();
     		this.lives--;
 	    	if (this.lives <= 0) {
 				var input = "</br></br><span class='button' id='dieFinal'>New Game</span>";
 				game.showMessage("Game over","Total Score: "+game.score.score+input);
 				game.gameOver = true;
-				$('#playerName').focus();
 			}
 			game.drawHearts(this.lives);
 		}
@@ -1213,9 +1208,7 @@ function pacmanGame() {
 			pinky.move();			
 			clyde.move();			
 			game.checkGhostMode();		
-		}		
-		// All dots collected?		
-		game.check();				
+		}					
 		//requestAnimationFrame(animationLoop);		
 		setTimeout(animationLoop, game.refreshRate);	
 	}
