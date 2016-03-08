@@ -2,7 +2,6 @@
 
 function pacmanGame() {
 /* ----- Global Variables ---------------------------------------- */
-	var canvas;
 	var joystick;
 	var context;
 	var game;
@@ -10,7 +9,12 @@ function pacmanGame() {
 	var inky, blinky, clyde, pinky;
 
 	var mapConfig = "data/map.json";
-	var questionsData ="data/questions.json"
+	var questionsData ="data/questions.json";
+	
+	var scale=Math.ceil(window.innerHeight*0.75/390);
+	var canvas = $("#pacmanCanvas").get(0);
+	canvas.width*=scale;
+	canvas.height*=scale;
 
 	function buildWall(context,gridX,gridY,width,height) {
 		width = width*2-1;
@@ -93,8 +97,9 @@ function pacmanGame() {
 			$(h).html("Lvl: "+this.level);
 		};
 		this.gameOver = false;
-		this.canvas = $("#myCanvas").get(0);
+		this.canvas = $("#pacmanCanvas").get(0);
 		this.wallColor = "Blue";
+
 		this.width = this.canvas.width;
 		this.height = this.canvas.height;
 
@@ -111,16 +116,32 @@ function pacmanGame() {
 		this.ghostModeTimer = 200;	// decrements each animationLoop execution
 		this.ghostSpeedNormal = (this.level > 3 ? 3 : 2);	// global default for ghost speed
 
-		this.svgData= {};
-		this.getSvgData= function(color,number){
-			var data= '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 593 620" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd"><defs><font id="FontID0" horiz-adv-x="591" font-weight="400" fill-rule="nonzero"><font-face font-family="Bauhaus 93"/><glyph unicode="3" horiz-adv-x="568"><path d="M106.998 666.998h352.997L351.172 410.83c38.996-26.334 67.497-55.325 85.162-86.824 17.828-31.5 26.66-68.833 26.66-111.837 0-64.336-23.498-118.666-70.66-162.843-47.174-44.162-105.17-66.324-174.167-66.324-38 0-75.84 7.333-113.173 21.835v188.834c28.338-17.842 52.846-26.675 73.672-26.675 22.668 0 41.832 8.165 57.166 24.508 15.497 16.33 23.172 36.666 23.172 60.832 0 27.655-11.505 49.832-34.677 66.324-23.157 16.508-54.166 24.673-92.82 24.673l49.163 131.67h-73.672v191.995z"/></glyph><glyph unicode="0" horiz-adv-x="568"><path d="M46.002 260.34v146.497c0 85.325 21.168 152.66 63.667 202C152.17 658.33 210 683 283.332 683c73.167 0 131-24.67 173.662-74.162 42.678-49.342 64.01-116.676 64.01-202v-146.5c0-85.502-21.332-153-64.01-202.668C414.334 7.838 356.5-16.997 283.332-16.997c-73.33 0-131.163 24.835-173.663 74.667C67.17 107.34 46 174.836 46 260.34zm189.992 185.656V221.328c0-40.822 15.84-61.322 47.34-61.322 31.84 0 47.664 20.5 47.664 61.322v224.668c0 40.673-15.824 61.01-47.665 61.01-31.5 0-47.34-20.337-47.34-61.01z"/></glyph><glyph unicode="8" horiz-adv-x="568"><path d="M447.837 382.493c27.833-28.664 46.997-55.16 57.492-79.165 10.51-24.166 15.674-53.498 15.674-87.996 0-66.16-22.503-121.5-67.675-165.825-45.157-44.34-101.49-66.503-169.003-66.503-67.823 0-124.32 22.163-169.492 66.503-45.17 44.325-67.838 99.664-67.838 165.825 0 33.503 5.507 62.835 16.507 87.996 10.836 25.013 29.822 51.51 56.66 79.165-24.166 31.84-36.16 67.334-36.16 106.344 0 56.334 18.66 102.663 56.156 139.328C177.67 664.667 225.336 683 283.333 683c58.5 0 106.67-18.17 144.33-54.672C465.16 592.004 484 545.334 484 488.332c0-38.328-11.994-73.672-36.16-105.84zm-165.84 157.513c-14.666 0-27.328-5.344-38-16.165-10.66-10.672-16.004-23.335-16.004-37.674 0-16.492 5.18-30.327 15.676-41C254.163 434.33 267.67 429 284 429c14.667 0 27.33 5.508 38.002 16.67 10.66 11 16.002 24.167 16.002 39.16 0 15.497-5.343 28.664-16.165 39.337-10.837 10.495-24.167 15.84-39.843 15.84zm1.01-248.003c-22.178 0-41.342-7.838-57.18-23.335C210 253.17 202 234.333 202 212.498c0-24.004 7.66-43.836 22.995-59.66 15.512-15.84 34.84-23.84 58.01-23.84 23.16 0 42.5 8 57.998 23.84 15.334 15.824 22.994 35.656 22.994 59.66 0 21.508-8 40.168-24.003 56.007-16.166 15.66-34.988 23.498-56.988 23.498z"/></glyph><glyph unicode="5" horiz-adv-x="568"><path d="M464.997 666.998V475.002H300.834l-8.67-30.342c59.838-17.16 104.163-42.157 132.842-74.666 39.322-44.325 58.99-97.334 58.99-159.324 0-65.508-24.002-119.838-71.994-163.005-48.006-43.168-108.497-64.662-181.5-64.662-49.165 0-97.676 13.004-145.505 38.996v164c38.165-18.66 71.67-27.997 100.674-27.997 30.002 0 53.663 6.828 71.165 20.5 17.5 13.834 26.17 32.494 26.17 55.992 0 26.334-13.508 48.838-40.346 67.007-26.825 18.333-59.987 27.492-99.488 27.492-15.007 0-34.84-2.82-59.674-8.654L155.33 667h309.667z"/></glyph><glyph unicode="2" horiz-adv-x="568"><path d="M519.995 193.005V0H89.333l214.5 401.167 7.333 13.672c5.834 10.657 8.832 21.167 8.832 31.662 0 26.333-15.497 39.5-46.67 39.5-12.157 0-22.83-4.498-31.826-13.33-8.996-8.832-13.508-19.342-13.508-31.336 0-13.51 5.833-25.83 17.68-36.83L160.17 252.16c-35.834 22.014-63.162 50.174-82.34 84.345C58.664 370.662 49 408.5 49 449.663c0 64.172 22.668 119.007 67.84 164.83C162.174 660.17 216.83 683 281.003 683c64.498 0 119.333-22.667 164.326-67.838 45.17-45.156 67.674-100.17 67.674-164.994 0-37.007-8.343-71.505-24.998-103.494l-79.343-153.668h111.332z"/></glyph><glyph unicode="7" horiz-adv-x="568"><path d="M509.664 666.998L315.827 0H113.173L264.17 475.002H60v191.996h449.664z"/></glyph><glyph unicode="4" horiz-adv-x="568"><path d="M529.006 666.998V0H341.003v508.996l-82-164.994h41v-145H39.827L237.004 667h292.002z"/></glyph><glyph unicode="1" horiz-adv-x="568"><path d="M379.004 666.998V0H190.007v666.998h188.997z"/></glyph><glyph unicode="9" horiz-adv-x="568"><path d="M391.162-19.505L215.836 42.5 345.664 406.33c3.503 10.332 5.33 19.832 5.33 28.338 0 17.5-6.488 32.657-19.49 45.334-13.005 12.663-28.34 19-46.167 19-18.006 0-33.177-6.338-45.676-19.178-12.498-12.825-18.658-28.16-18.658-46.33 0-18.495 6.16-33.992 18.66-46.49 12.498-12.678 27.832-19.002 46-19.002 4.01 0 10.17.668 18.497 1.826l-78.987-191.49C155.835 208.502 106.003 243 75.66 281.832 45.17 320.503 30 368.835 30 426.67c0 71.994 24.67 132.662 74 182.168C153.325 658.328 213.83 683 285.5 683c67.66 0 126.83-24.834 177.493-74.503 50.678-49.67 76.002-107.666 76.002-173.99 0-30.847-11.83-79.002-35.656-144.51L391.16-19.504z"/></glyph><glyph unicode="6" horiz-adv-x="568"><path d="M177.67 686.504L352.998 624.5l-129.16-365.007c-3.83-10.494-5.834-19.832-5.834-27.996 0-17.5 6.502-32.657 19.49-45.498 13.004-12.663 28.338-19 46.166-19 18.005 0 33.176 6.5 45.675 19.34 12.5 12.99 18.66 28.665 18.66 46.998 0 18.17-6.324 33.83-18.823 46.492-12.677 12.84-27.833 19.164-45.84 19.164-4.334 0-10.672-.653-19.163-1.99l79.668 191.492c68.996-30 118.828-64.498 149.333-103.494 30.49-38.833 45.825-87.166 45.825-144.836 0-72.336-24.656-133.33-73.998-182.837-49.328-49.492-109.833-74.326-181.5-74.326-67.662 0-126.83 24.834-177.494 74.503C55.34 107.34 30 165.337 30 231.837c0 30.67 11.83 78.824 35.67 144.66l112 310.007z"/></glyph></font><style>@font-face{font-family:&quot;Bauhaus 93&quot;;src:url(&quot;#FontID0&quot;) format(svg)}.fil1{fill:#fff}.fil0{fill:'+color+'}.fnt0{font-weight:400;font-size:265.22px;font-family:&apos;Bauhaus 93&apos;}</style></defs><g id="Layer_x0020_1"><path id="Blinky" class="fil0" d="M17 597C4 579 0 545 1 448 1 221 23 137 102 66 156 17 207 0 303 0c66 0 88 5 140 31 115 59 141 126 148 386 4 147 3 158-17 176-27 25-57 16-112-30-24-20-47-37-52-37s-28 19-50 42c-23 23-49 41-59 41-9 0-40-18-68-41-56-47-67-50-88-25-18 22-93 77-104 77-4 0-15-11-24-23z"/><text x="52" y="368" class="fil1 fnt0">'+number+'</text></g></svg>';
+		this.svgData= {
+			pacman: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2563 2563" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd"><defs><style><![CDATA[.fil2 {fill:none}.fil0 {fill:#FFED59}.fil6 {fill:#3B0A6E;fill-rule:nonzero}.fil5 {fill:#8143C4;fill-rule:nonzero}.fil7 {fill:#DECF2A;fill-rule:nonzero}.fil3 {fill:#EDDD38;fill-rule:nonzero}.fil4 {fill:white;fill-rule:nonzero}.fil1 {fill:#D1C306;fill-rule:nonzero;fill-opacity:0.400000}]]></style><clipPath id="id0"><path d="M1409 1320l1154 604c-116 197-288 361-496 473-632 343-1440 138-1804-457S117 584 750 242c29-16 60-31 90-45-34-27-75-50-123-65-145-45-321-5-522 119-28 18-65 10-84-16-18-26-10-62 18-79C363 12 573-33 755 24c87 27 156 75 208 125 591-200 1267 21 1591 551l-1145 620z"/></clipPath></defs><g id="Layer_x0020_1"><g id="_1954663795152"><path class="fil0" d="M1409 1320l1154 604c-116 197-288 361-496 473-632 343-1440 138-1804-457S117 584 750 242c29-16 60-31 90-45-34-27-75-50-123-65-145-45-321-5-522 119-28 18-65 10-84-16-18-26-10-62 18-79C363 12 573-33 755 24c87 27 156 75 208 125 591-200 1267 21 1591 551l-1145 620z"/><g clip-path="url(#id0)"><path id="1" class="fil1" d="M2263 264c0 147-127 266-283 266s-283-119-283-266S1824-2 1980-2s283 119 283 266z"/><path class="fil1" d="M476 1030c0 135-117 244-260 244-144 0-260-109-260-244S72 785 216 785c143 0 260 110 260 245zM736 2261c0 136-117 246-261 246s-261-110-261-246c0-135 117-245 261-245s261 110 261 245zM736 1477c0 67-58 122-130 122s-130-55-130-122c0-68 58-123 130-123s130 55 130 123zM1697 1836c0 147-127 267-283 267s-283-120-283-267 127-266 283-266 283 119 283 266zM1970 2235c0 34-29 62-65 62s-65-28-65-62 29-61 65-61 65 27 65 61zM2831 1714c0 147-127 266-283 266s-283-119-283-266 127-267 283-267 283 120 283 267zM1451 2358c0 34-29 62-65 62s-66-28-66-62 30-61 66-61 65 27 65 61z"/></g><path class="fil2" d="M1409 1320l1154 604c-116 197-288 361-496 473-632 343-1440 138-1804-457S117 584 750 242c29-16 60-31 90-45-34-27-75-50-123-65-145-45-321-5-522 119-28 18-65 10-84-16-18-26-10-62 18-79C363 12 573-33 755 24c87 27 156 75 208 125 591-200 1267 21 1591 551l-1145 620z"/><path class="fil3" d="M1630 711c0 239-206 433-460 433S710 950 710 711s206-432 460-432 460 193 460 432z"/><path class="fil4" d="M1555 711c0 200-172 362-385 362-212 0-384-162-384-362s172-362 384-362c213 0 385 162 385 362z"/><path class="fil5" d="M1419 711c0 130-111 234-249 234-137 0-248-104-248-234 0-129 111-234 248-234 138 0 249 105 249 234z"/><path class="fil6" d="M1300 711c0 68-58 122-130 122-71 0-129-54-129-122 0-67 58-122 129-122 72 0 130 55 130 122z"/><path class="fil4" d="M1449 574c0 64-55 115-122 115-68 0-123-51-123-115s55-116 123-116c67 0 122 52 122 116z"/><path class="fil7" d="M8 257c28 82 120 126 207 100 86-26 133-113 106-194C293 81 200 37 114 63S-20 176 8 257z"/></g></g></svg>'
+		};
+		this.getSvgData= function(id,number){
+			var data;
+			switch(id){
+				case 0:
+					data='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2450 2563" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd"><defs><style><![CDATA[@font-face { font-family:"Geometr415 Blk BT";src:url("#FontID0") format(svg)}.fil6 {fill:#FEFEFE}.fil4 {fill:#422D90;fill-rule:nonzero}.fil3 {fill:#604BAB;fill-rule:nonzero}.fil1 {fill:#D6427B;fill-rule:nonzero}.fil0 {fill:#FF4F93;fill-rule:nonzero}.fil2 {fill:white;fill-rule:nonzero}.fil5 {fill:#085256;fill-rule:nonzero;fill-opacity:0.400000}.fnt0 {font-weight:normal;font-size:724.319px;font-family:"Geometr415 Blk BT"}]]></style></defs><g id="Layer_x0020_1"><g id="_1954663778864"><path class="fil0" d="M1929 2169V1100c0-389-315-704-704-704s-704 315-704 704v1069c-48 0-88 40-88 88v218c0 49 40 88 88 88 49 0 88-39 88-88v-83c0-49 40-88 88-88 49 0 88 39 88 88v83c0 49 40 88 88 88 49 0 88-39 88-88v-83c0-49 40-88 88-88 49 0 88 39 88 88v83c0 49 39 88 88 88s88-39 88-88v-83c0-49 39-88 88-88 48 0 88 39 88 88v83c0 49 39 88 88 88 48 0 88-39 88-88v-83c0-49 39-88 88-88 48 0 88 39 88 88v83c0 49 39 88 88 88 48 0 88-39 88-88v-218c0-48-40-88-88-88z"/><path class="fil0" d="M1222 426h-1c-22-1-38-19-38-41 1-7 9-183 146-283 99-73 238-86 413-38 21 6 33 27 27 48s-27 33-48 27c-150-41-267-32-346 26-107 78-113 222-113 223-1 21-19 38-40 38zM630 1058s-20 29-188 29c-117 0-296-170-342-79-38 76 83 286 191 200 120-95 296-71 339-57v-93zM1820 1058s20 29 188 29c117 0 296-170 342-79 38 76-83 286-191 200-120-95-296-71-339-57v-93z"/><path class="fil1" d="M1693 1066c0 258-210 467-468 467s-468-209-468-467 210-468 468-468 468 210 468 468z"/><path class="fil2" d="M1616 1066c0 216-175 391-391 391s-391-175-391-391 175-391 391-391 391 175 391 391z"/><path class="fil3" d="M1478 1066c0 139-113 253-253 253s-253-114-253-253c0-140 113-253 253-253s253 113 253 253z"/><path class="fil4" d="M1357 1066c0 73-59 132-132 132s-132-59-132-132 59-132 132-132 132 59 132 132z"/><path class="fil2" d="M1509 917c0 69-56 125-125 125s-125-56-125-125 56-124 125-124 125 55 125 124z"/><path class="fil1" d="M1838 106c0 59-48 106-107 106-58 0-106-47-106-106 0-58 48-106 106-106 59 0 107 48 107 106zM1400 364c0 29-24 53-53 53h-244c-29 0-53-24-53-53 0-30 24-54 53-54h244c29 0 53 24 53 54zM1929 1217c-108 0-195 87-195 195 0 107 87 194 195 194v-389zM521 1951c69 0 125-55 125-124s-56-124-125-124v248zM776 1436c0 40-32 73-72 73-41 0-73-33-73-73s32-73 73-73c40 0 72 33 72 73zM563 862c151-11 271-137 271-292 0-17-2-35-5-52-121 83-216 203-266 344zM1889 1853c0 32-26 58-58 58-33 0-59-26-59-58s26-59 59-59c32 0 58 27 58 59zM1816 718c-52-81-121-150-201-204-17 24-27 53-27 84 0 81 65 146 146 146 30 0 59-9 82-26z"/><path class="fil5" d="M1168 1652c0 22-14 40-32 40-17 0-31-18-31-40 0-23 14-41 31-41 18 0 32 18 32 41zM1345 1652c0 22-14 40-31 40-18 0-32-18-32-40 0-23 14-41 32-41 17 0 31 18 31 41z"/><path class="fil1" d="M223 1078c30 49 37 99 16 112-22 14-64-15-94-64-30-48-37-99-16-112s63 15 94 64zM2227 1078c-30 49-37 99-16 112 22 14 64-15 94-64 30-48 37-99 16-112s-63 15-94 64z"/><g><text x="1800" y="1282"  text-anchor="middle" class="fil6 fnt0" transform="matrix(1 0 0 1 -619.12 854.295)">'+number+'</text></g></g></g></svg>';
+					break;
+				case 1:
+					data='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2450 2563" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd"><defs><style><![CDATA[@font-face { font-family:"Geometr415 Blk BT";src:url("#FontID0") format(svg)}.fil7 {fill:#FEFEFE}.fil1 {fill:#16C1CF;fill-rule:nonzero}.fil0 {fill:#1AE2EF;fill-rule:nonzero}.fil4 {fill:#4F0523;fill-rule:nonzero}.fil3 {fill:#D40C5E;fill-rule:nonzero}.fil2 {fill:white;fill-rule:nonzero}.fil6 {fill:#085256;fill-rule:nonzero;fill-opacity:0.400000}.fil5 {fill:#16BFCC;fill-rule:nonzero;fill-opacity:0.400000}.fnt0 {font-weight:normal;font-size:724.039px;font-family:"Geometr415 Blk BT"}]]></style></defs><g id="Layer_x0020_1"><g id="_1954665153200"><path class="fil0" d="M1928 2169V1100c0-389-315-704-703-704s-703 315-703 704v1069c-49 0-88 39-88 88v218c0 48 39 88 88 88 48 0 88-40 88-88v-83c0-49 39-88 88-88 48 0 87 39 87 88v83c0 48 40 88 88 88 49 0 88-40 88-88v-83c0-49 40-88 88-88 49 0 88 39 88 88v83c0 48 39 88 88 88s88-40 88-88v-83c0-49 39-88 88-88 48 0 88 39 88 88v83c0 48 39 88 88 88 48 0 88-40 88-88v-83c0-49 39-88 87-88 49 0 88 39 88 88v83c0 48 40 88 88 88 49 0 88-40 88-88v-218c0-49-39-88-88-88z"/><path class="fil1" d="M1692 1066c0 258-209 467-467 467s-467-209-467-467 209-467 467-467 467 209 467 467z"/><path class="fil2" d="M1616 1066c0 216-175 391-391 391s-391-175-391-391 175-391 391-391 391 175 391 391z"/><path class="fil3" d="M1478 1066c0 140-113 253-253 253s-253-113-253-253 113-253 253-253 253 113 253 253z"/><path class="fil4" d="M1357 1066c0 73-59 132-132 132s-132-59-132-132 59-132 132-132 132 59 132 132z"/><path class="fil2" d="M1509 918c0 68-56 124-125 124s-125-56-125-124c0-69 56-125 125-125s125 56 125 125z"/><path class="fil0" d="M1222 426h-1c-22-1-38-19-38-40 1-8 9-183 146-284 99-73 238-86 413-38 21 6 33 28 27 48-6 21-27 34-48 28-150-42-267-33-346 25-107 79-113 222-113 224-1 21-19 37-40 37z"/><path class="fil1" d="M1837 107c0 58-47 106-106 106-58 0-106-48-106-106 0-59 48-107 106-107 59 0 106 48 106 107zM1400 364c0 29-24 53-53 53h-244c-29 0-53-24-53-53s24-53 53-53h244c29 0 53 24 53 53z"/><path class="fil5" d="M1928 1217c-107 0-194 87-194 195 0 107 87 194 194 194v-389zM522 1951c68 0 124-56 124-124 0-69-56-125-124-125v249zM777 1436c0 40-33 73-73 73s-73-33-73-73 33-73 73-73 73 33 73 73zM563 862c152-11 271-137 271-291 0-18-1-36-5-53-121 83-215 203-266 344zM1889 1853c0 32-26 58-59 58-32 0-58-26-58-58 0-33 26-59 58-59 33 0 59 26 59 59zM1816 719c-52-81-121-151-201-205-17 24-27 53-27 85 0 80 65 145 146 145 30 0 59-9 82-25z"/><path class="fil6" d="M1168 1652c0 22-14 40-32 40-17 0-31-18-31-40 0-23 14-41 31-41 18 0 32 18 32 41zM1345 1652c0 22-14 40-31 40-18 0-32-18-32-40 0-23 14-41 32-41 17 0 31 18 31 41z"/><path class="fil0" d="M630 1058s-20 29-188 29c-117 0-295-170-341-79-39 76 83 286 191 200 119-95 295-71 338-57v-93z"/><path class="fil6" d="M223 1078c30 49 38 99 16 112-21 14-63-15-94-64-30-48-37-99-16-112 22-13 64 15 94 64z"/><path class="fil0" d="M1820 1058s20 29 188 29c117 0 295-170 341-79 39 76-83 286-191 200-119-95-295-71-338-57v-93z"/><path class="fil6" d="M2227 1078c-30 49-38 99-16 112 21 14 63-15 94-64 30-48 37-99 16-112-22-13-64 15-94 64z"/><text x="1200" y="2136"  text-anchor="middle" class="fil7 fnt0">'+number+'</text></g></g></svg>';
+					break;
+				case 2:
+					data='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2450 2563" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd"><defs><style><![CDATA[@font-face { font-family:"Geometr415 Blk BT";src:url("#FontID0") format(svg)}.fil7 {fill:#FEFEFE}.fil1 {fill:#00487D;fill-rule:nonzero}.fil0 {fill:#0079CC;fill-rule:nonzero}.fil5 {fill:#078AE3;fill-rule:nonzero}.fil4 {fill:#3B0A6E;fill-rule:nonzero}.fil3 {fill:#896CA8;fill-rule:nonzero}.fil2 {fill:white;fill-rule:nonzero}.fil6 {fill:#085256;fill-rule:nonzero;fill-opacity:0.400000}.fnt0 {font-weight:normal;font-size:724.291px;font-family:"Geometr415 Blk BT"}]]></style></defs><g id="Layer_x0020_1"><g id="_1954549022448"><path class="fil0" d="M1929 2169V1100c0-389-315-704-704-704s-704 315-704 704v1069c-48 0-88 40-88 88v218c0 49 40 88 88 88 49 0 88-39 88-88v-83c0-49 40-88 88-88 49 0 88 39 88 88v83c0 49 40 88 88 88 49 0 88-39 88-88v-83c0-49 40-88 88-88 49 0 88 39 88 88v83c0 49 39 88 88 88s88-39 88-88v-83c0-49 39-88 88-88 48 0 88 39 88 88v83c0 49 39 88 88 88 48 0 88-39 88-88v-83c0-49 39-88 88-88 48 0 88 39 88 88v83c0 49 39 88 88 88 48 0 88-39 88-88v-218c0-48-40-88-88-88z"/><path class="fil0" d="M1222 426h-1c-22-1-38-19-38-41 1-7 9-183 146-283 99-73 238-86 413-38 21 6 33 27 27 48s-27 33-48 27c-150-41-267-32-346 26-107 78-113 222-113 223-1 21-19 38-40 38zM630 1058s-20 29-188 29c-117 0-296-170-342-79-38 76 83 286 191 200 120-95 296-71 339-57v-93zM1820 1058s20 29 188 29c117 0 296-170 342-79 38 76-83 286-191 200-120-95-296-71-339-57v-93z"/><path class="fil1" d="M1693 1066c0 258-210 467-468 467s-468-209-468-467 210-468 468-468 468 210 468 468zM1838 106c0 59-48 106-107 106-58 0-106-47-106-106 0-58 48-106 106-106 59 0 107 48 107 106zM1400 364c0 29-24 53-53 53h-244c-29 0-53-24-53-53 0-30 24-54 53-54h244c29 0 53 24 53 54zM223 1078c30 49 37 99 16 112-22 14-64-15-94-64-30-48-38-99-16-112 21-13 63 15 94 64zM2227 1078c-30 49-37 99-16 112 22 14 64-15 94-64 30-48 37-99 16-112s-63 15-94 64z"/><path class="fil2" d="M1616 1066c0 216-175 391-391 391s-391-175-391-391 175-391 391-391 391 175 391 391z"/><path class="fil3" d="M1478 1066c0 139-113 253-253 253s-253-114-253-253c0-140 113-253 253-253s253 113 253 253z"/><path class="fil4" d="M1357 1066c0 73-59 132-132 132s-132-59-132-132 59-132 132-132 132 59 132 132z"/><path class="fil2" d="M1509 917c0 69-56 125-125 125s-125-56-125-125 56-124 125-124 125 55 125 124z"/><path class="fil5" d="M1929 1217c-108 0-195 87-195 195 0 107 87 194 195 194v-389zM521 1951c69 0 125-55 125-124s-56-124-125-124v248zM776 1436c0 40-32 73-72 73-41 0-73-33-73-73s32-73 73-73c40 0 72 33 72 73zM563 862c151-11 271-137 271-291 0-18-2-36-5-53-121 83-216 203-266 344zM1889 1853c0 32-26 58-58 58-33 0-59-26-59-58s26-59 59-59c32 0 58 27 58 59zM1816 718c-52-81-121-150-201-204-17 24-27 53-27 84 0 81 65 146 146 146 30 0 59-9 82-26z"/><path class="fil6" d="M1168 1652c0 22-14 40-32 40-17 0-31-18-31-40 0-23 14-41 31-41 18 0 32 18 32 41zM1345 1652c0 22-14 40-31 40-18 0-32-18-32-40 0-23 14-41 32-41 17 0 31 18 31 41z"/><g><text x="1800" y="1282" class="fil7 fnt0" transform="matrix(1 0 0 1 -619.155 854.314)" text-anchor="middle">'+number+'</text></g></g></g></svg>';
+					break;
+				case 3:
+					data='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2450 2563" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd"><defs><style><![CDATA[@font-face { font-family:"Geometr415 Blk BT";src:url("#FontID0") format(svg)}.fil7 {fill:#FEFEFE}.fil1 {fill:#266254;fill-rule:nonzero}.fil5 {fill:#39B193;fill-rule:nonzero}.fil0 {fill:#49C1A3;fill-rule:nonzero}.fil4 {fill:#591349;fill-rule:nonzero}.fil3 {fill:#BC2A9A;fill-rule:nonzero}.fil2 {fill:white;fill-rule:nonzero}.fil6 {fill:#085256;fill-rule:nonzero;fill-opacity:0.400000}.fnt0 {font-weight:normal;font-size:724.327px;font-family:"Geometr415 Blk BT"}]]></style></defs><g id="Layer_x0020_1"><g id="_1954549021808"><path class="fil0" d="M1929 2169V1100c0-389-315-704-704-704s-704 315-704 704v1069c-48 0-88 40-88 88v218c0 49 40 88 88 88 49 0 88-39 88-88v-83c0-49 40-88 88-88 49 0 88 39 88 88v83c0 49 40 88 88 88 49 0 88-39 88-88v-83c0-49 40-88 88-88 49 0 88 39 88 88v83c0 49 39 88 88 88s88-39 88-88v-83c0-49 39-88 88-88 48 0 88 39 88 88v83c0 49 39 88 88 88 48 0 88-39 88-88v-83c0-49 39-88 88-88 48 0 88 39 88 88v83c0 49 39 88 88 88 48 0 88-39 88-88v-218c0-48-40-88-88-88z"/><path class="fil0" d="M1222 426h-1c-22-1-39-19-38-41 1-7 9-183 146-283 99-73 238-86 413-38 21 6 33 27 27 48s-27 33-48 27c-150-41-267-32-346 26-107 78-113 222-113 223-1 21-19 38-40 38zM630 1058s-20 29-188 29c-117 0-296-170-342-79-38 76 83 286 191 200 120-95 296-71 339-57v-93zM1820 1058s20 29 188 29c117 0 296-170 342-79 38 76-83 286-191 200-120-95-296-71-339-57v-93z"/><path class="fil1" d="M1693 1066c0 258-210 467-468 467s-468-209-468-467 210-468 468-468 468 210 468 468zM1838 106c0 59-48 106-107 106-58 0-106-47-106-106 0-58 48-106 106-106 59 0 107 48 107 106zM1400 364c0 29-24 53-53 53h-244c-29 0-53-24-53-53 0-30 24-54 53-54h244c29 0 53 24 53 54zM223 1078c30 49 37 99 16 112-22 14-64-15-94-64-30-48-38-99-16-112 21-13 63 15 94 64zM2227 1078c-30 49-37 99-16 112 22 14 64-15 94-64 30-48 37-99 16-112s-63 15-94 64z"/><path class="fil2" d="M1616 1066c0 216-175 391-391 391s-391-175-391-391 175-391 391-391 391 175 391 391z"/><path class="fil3" d="M1478 1066c0 139-113 253-253 253s-253-114-253-253c0-140 113-253 253-253s253 113 253 253z"/><path class="fil4" d="M1357 1066c0 73-59 132-132 132s-132-59-132-132 59-132 132-132 132 59 132 132z"/><path class="fil2" d="M1509 917c0 69-56 125-125 125s-125-56-125-125 56-124 125-124 125 55 125 124z"/><path class="fil5" d="M1929 1217c-108 0-195 87-195 195 0 107 87 194 195 194v-389zM521 1951c69 0 125-55 125-124s-56-124-125-124v248zM776 1436c0 40-32 73-72 73-41 0-73-33-73-73s32-73 73-73c40 0 72 33 72 73zM563 862c151-11 271-137 271-291 0-18-2-36-5-53-121 83-216 203-266 344zM1889 1853c0 32-26 58-58 58-33 0-59-26-59-58s26-59 59-59c32 0 58 27 58 59zM1816 718c-52-81-121-150-201-204-17 24-27 53-27 84 0 81 65 146 146 146 30 0 59-9 82-26z"/><path class="fil6" d="M1168 1652c0 22-14 40-32 40-17 0-31-18-31-40 0-23 14-41 31-41 18 0 32 18 32 41zM1345 1652c0 22-14 40-31 40-18 0-32-18-32-40 0-23 14-41 32-41 17 0 31 18 31 41z"/><text x="1800" y="1282" class="fil7 fnt0" transform="matrix(1 0 0 1 -619.146 854.327)" text-anchor="middle">'+number+'</text></g></g></svg>';
+					break;
+			}
             return data;
 		}
 		this.populateSvgData=function(){
-			game.svgData['pinky']=game.getSvgData('pink',game.question.que[game.level][0].answer);
-			game.svgData['blinky']=game.getSvgData('red',game.question.que[game.level][1].answer);
-			game.svgData['inky']=game.getSvgData('blue',game.question.que[game.level][2].answer);
-			game.svgData['clyde']=game.getSvgData('orange',game.question.que[game.level][3].answer);
+			game.svgData['pinky']=game.getSvgData(0,game.question.que[game.level][0].answer);
+			game.svgData['blinky']=game.getSvgData(1,game.question.que[game.level][1].answer);
+			game.svgData['inky']=game.getSvgData(2,game.question.que[game.level][2].answer);
+			game.svgData['clyde']=game.getSvgData(3,game.question.que[game.level][3].answer);
 		}
 		this.getSvgUrl=function(name){
 			var DOMURL = window.URL || window.webkitURL || window;
@@ -147,8 +168,8 @@ function pacmanGame() {
 		};
 		
 		this.getMapContent = function (x, y) {
-			var maxX = game.width / 30 -1;
-			var maxY = game.height / 30 -1;
+			var maxX = 17;
+			var maxY = 12;
 			if (x < 0) x = maxX + x;
 			if (x > maxX) x = x-maxX;
 			if (y < 0) y = maxY + y;
@@ -157,7 +178,13 @@ function pacmanGame() {
 		};
 
 		this.setMapContent = function (x,y,val) {
-			this.map.posY[y].posX[x].type = val;
+			var maxX = 17;
+			var maxY = 12;
+			if (x < 0) x = maxX + x;
+			if (x > maxX) x = x-maxX;
+			if (y < 0) y = maxY + y;
+			if (y > maxY) y = y-maxY;
+			this.map.posY[y].posX[x].type=val;
 		};
 		
 		this.toggleSound = function() { 
@@ -604,10 +631,10 @@ function pacmanGame() {
 				this.posY += this.speed * this.dirY;
 				
 				// Check if out of canvas
-				if (this.posX >= game.width-this.radius) this.posX = this.speed-this.radius;
-				if (this.posX <= 0-this.radius) this.posX = game.width-this.speed-this.radius;
-				if (this.posY >= game.height-this.radius) this.posY = this.speed-this.radius;
-				if (this.posY <= 0-this.radius) this.posY = game.height-this.speed-this.radius;
+				if (this.posX >= game.width/scale-this.radius) this.posX = this.speed-this.radius;
+				if (this.posX <= 0-this.radius) this.posX = game.width/scale-this.speede-this.radius;
+				if (this.posY >= game.height/scale-this.radius) this.posY = this.speed-this.radius;
+				if (this.posY <= 0-this.radius) this.posY = game.height/scale-this.speed-this.radius;
 			}
 		}
 			
@@ -659,8 +686,8 @@ function pacmanGame() {
 					var pdirX = pdir.dirX == 0 ? - pdir.dirY : pdir.dirX;
 					var pdirY = pdir.dirY == 0 ? - pdir.dirX : pdir.dirY;
 					
-					var tX = (pacman.getGridPosX() + pdirX*4) % (game.width / pacman.radius +1);
-					var tY = (pacman.getGridPosY() + pdirY*4) % (game.height / pacman.radius +1);
+					var tX = (pacman.getGridPosX() + pdirX*4) % (game.width / pacman.radius*scale +1);
+					var tY = (pacman.getGridPosY() + pdirY*4) % (game.height / pacman.radius*scale +1);
 					break;
 				
 				// target: pacman
@@ -798,10 +825,10 @@ function pacmanGame() {
 				this.posX += this.speed * this.dirX;
 				this.posY += this.speed * this.dirY;
 				// Check if out of canvas
-				if (this.posX >= game.width-this.radius) this.posX = this.speed-this.radius;
-				if (this.posX <= 0-this.radius) this.posX = game.width-this.speed-this.radius;
-				if (this.posY >= game.height-this.radius) this.posY = this.speed-this.radius;
-				if (this.posY <= 0-this.radius) this.posY = game.height-this.speed-this.radius;
+				if (this.posX >= game.width/scale-this.radius) this.posX = this.speed*scale-this.radius*scale;
+				if (this.posX <= 0-this.radius) this.posX = game.width-this.speed*scale-this.radius*scale;
+				if (this.posY >= game.height/scale-this.radius) this.posY = this.speed*scale-this.radius*scale;
+				if (this.posY <= 0-this.radius) this.posY = game.height-this.speed*scale-this.radius*scale;
 				}
 			}
 		this.stop = function() { this.stop = true;}
@@ -840,6 +867,8 @@ function pacmanGame() {
 		this.stuckX = 0;
 		this.stuckY = 0;
 		this.frozen = false;		// used to play die Animation
+		this.image = new Image();
+		this.image.src = game.getSvgUrl('pacman');
 		this.freeze = function () {
 			this.frozen = true;
 		}
@@ -890,7 +919,7 @@ function pacmanGame() {
 								Sound.play("waka");
 								s = 10;
 								game.pillCount--;
-								game.map.posY[gridY].posX[gridX].type = "null";
+								game.setMapContent(gridX, gridY,"null");
 							}
 							game.score.add(s);
 						}
@@ -923,10 +952,10 @@ function pacmanGame() {
 						// check if possible to change direction without getting stuck
 						var x = this.getGridPosX()+this.directionWatcher.get().dirX;
 						var y = this.getGridPosY()+this.directionWatcher.get().dirY;
-						if (x <= -1) x = game.width/(this.radius*2)-1;
-						if (x >= game.width/(this.radius*2)) x = 0;
-						if (y <= -1) x = game.height/(this.radius*2)-1;
-						if (y >= game.heigth/(this.radius*2)) y = 0;
+						if (x <= -1) x = game.width/(this.radius*2*scale)-1;
+						if (x >= game.width/(this.radius*2*scale)) x = 0;
+						if (y <= -1) x = game.height/(this.radius*2*scale)-1;
+						if (y >= game.heigth/(this.radius*2*scale)) y = 0;
 						var nextTile = game.map.posY[y].posX[x].type;
 						if (nextTile != "wall") {
 							this.setDirection(this.directionWatcher.get());
@@ -952,10 +981,10 @@ function pacmanGame() {
 				this.posY += this.speed * this.dirY;
 				
 				// Check if out of canvas
-				if (this.posX >= game.width-this.radius) this.posX = 5-this.radius;
-				if (this.posX <= 0-this.radius) this.posX = game.width-5-this.radius;
-				if (this.posY >= game.height-this.radius) this.posY = 5-this.radius;
-				if (this.posY <= 0-this.radius) this.posY = game.height-5-this.radius;
+				if (this.posX >= game.width-this.radius*scale) this.posX = 5-this.radius;
+				if (this.posX <= 0-this.radius*scale) this.posX = game.width/scale-5-this.radius;
+				if (this.posY >= game.height-this.radius*scale) this.posY = 5-this.radius;
+				if (this.posY <= 0-this.radius*scale) this.posY = game.height/scale-5-this.radius;
 			}
 			else this.dieAnimation();
 		}
@@ -1112,7 +1141,6 @@ function pacmanGame() {
 			game.toggleSound();
 		});
 
-		canvas = $("#myCanvas").get(0);
 		context = canvas.getContext("2d");
         
         game.init(0);
@@ -1128,6 +1156,7 @@ function pacmanGame() {
 		context.beginPath();
 		context.fillStyle = "White";
 		context.strokeStyle = "White";
+		context.scale(scale,scale);
 		
 		var dotPosY;
 		$.each(game.map.posY, function(i, item) {
@@ -1166,34 +1195,8 @@ function pacmanGame() {
 		}
 	}
 	
-	function renderGrid(gridPixelSize, color){
-		context.save();
-		context.lineWidth = 0.5;
-		context.strokeStyle = color;
-		
-		// horizontal grid lines
-		for(var i = 0; i <= canvas.height; i = i + gridPixelSize){
-			context.beginPath();
-			context.moveTo(0, i);
-			context.lineTo(canvas.width, i);
-			context.closePath();
-			context.stroke();
-		}
-		
-		// vertical grid lines
-		for(var i = 0; i <= canvas.width; i = i + gridPixelSize){
-			context.beginPath();
-			context.moveTo(i, 0);
-			context.lineTo(i, canvas.height);
-			context.closePath();
-			context.stroke();
-		}
-		context.restore();
-	}
-	
 	function animationLoop(){
 		canvas.width = canvas.width;
-		//renderGrid(pacman.radius, "red");
 		renderContent();
 		
 		if (game.dieAnimation == 1) pacman.dieAnimation();

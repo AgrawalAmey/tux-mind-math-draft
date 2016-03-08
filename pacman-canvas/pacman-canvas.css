@@ -110,8 +110,8 @@ textarea:focus {
     border: none;
     display: block;
     background: rgb(0, 0, 0);
-    width: 100%;
-    height: auto;
+    width:1080px;
+    height:780px;
 }
 
 #canvas-container {
