@@ -15,6 +15,11 @@ function pacmanGame() {
 	var canvas = $("#pacmanCanvas").get(0);
 	canvas.width*=scale;
 	canvas.height*=scale;
+	canvas.style.height=canvas.height+'px';
+	canvas.style.width=canvas.width+'px';
+	var overlay = $("#canvas-overlay-container").get(0);
+	overlay.style.width=canvas.width+'px';
+	overlay.style.left= (document.getElementById("canvas-container").offsetWidth-canvas.width)/2+'px';
 
 	function buildWall(context,gridX,gridY,width,height) {
 		width = width*2-1;

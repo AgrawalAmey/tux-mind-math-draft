@@ -106,35 +106,27 @@ textarea:focus {
     float: right;
 }
 
-#myCanvas {
+#pacmanCanvas {
     border: none;
     display: block;
     background: rgb(0, 0, 0);
-    width:1080px;
-    height:780px;
+    margin: auto;
 }
 
 #canvas-container {
     position: relative;
+    margin-top: 15px;
 }
 
 #canvas-overlay-container {
-    position: absolute;
     background: rgba(0, 0, 0, 0.7);
+    position: absolute;
     height: 100%;
-    width: 540px;
-    max-width: 100%;
 }
 
 #canvas-overlay-content {
-    position: absolute;
-    top: 33%;
-    left: 0;
-    margin-top: 0;
-    max-width: 100%;
     text-align: center;
-    width: 540px;
-    max-width: 100%;
+    margin-top:33%;
 }
 
 #canvas-overlay-content #title {
@@ -148,18 +140,13 @@ textarea:focus {
 }
 
 .main {
-    width: 100%;
-    max-width: 660px;
+    width: 75%;
     margin: 10px auto;
     position: static;
-    left: auto;
 }
 
 .content {
-    width: 100%;
-    max-width: 540px;
-    text-align: left;
-    margin: 0;
+    margin: auto;
 }
 
 .container {
@@ -173,7 +160,6 @@ textarea:focus {
 }
 
 .game {
-    max-width: 540px;
     margin: auto;
 }
 

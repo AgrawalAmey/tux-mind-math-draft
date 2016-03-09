@@ -1,15 +1,3 @@
-/**********************************************************************************
-
-       .__          __         .__    ____                     .__     
-______ |  | _____ _/  |________|  |__/_   |______  ______ ____ |  |__  
-\____ \|  | \__  \\   __\___   /  |  \|   \_  __ \/  ___// ___\|  |  \ 
-|  |_> >  |__/ __ \|  |  /    /|   Y  \   ||  | \/\___ \\  \___|   Y  \
-|   __/|____(____  /__| /_____ \___|  /___||__|  /____  >\___  >___|  / .ch
-|__|             \/           \/    \/                \/     \/  
-
-**********************************************************************************/
-
-
 @font-face {
     font-family: 'Socialico';
     src: url(fonts/Socialico.otf) format('otf'),
@@ -129,20 +117,17 @@ ul.nav a, ul.nav a:link, ul.nav a:active, ul.nav a:visited, ul.nav a:hover, ul.n
 	display: inline-block;
 	position: static;
     margin: 0 auto;
-    text-align: left;
-	}
+}
 
 .header { display: none;}
 	
 .header, .content, .footer { 
 	margin: 30px;
-	max-width: 700px;
 	background: rgba(0,0,0,0.4);
 	background/*\**/: url(img/bg/black_40.png)\9;
 	color: rgba(255,255,255,0.9);
 	color/*\**/: rgb(250,250,250)\9;
 	padding: 4em;
-    width: 700px;
 -webkit-box-shadow: 2px 2px 5px rgba(50, 50, 50, 0.75);
 -moz-box-shadow:    2px 2px 5px rgba(50, 50, 50, 0.75);
 box-shadow:         2px 2px 5px rgba(50, 50, 50, 0.75);
@@ -168,36 +153,6 @@ box-shadow:         2px 2px 5px rgba(50, 50, 50, 0.75);
 	color: #367e20;
 	}
 	
-.content { 
-    min-height: 400px;
-}
-
-
-.logo {
-	width: 220px;
-	display: block;
-	margin: 30px auto 10px auto;
-	
-	}
-	
-.social{ 
-	font-family: 'Socialico';
-	text-transform: none;
-	font-size: 40px;
-	text-align:center;
-	line-height: 55px;
-	vertical-align: top;
-	}
-
-.social a, .social  a:link, .social a:active, .social a:visited, .social a:hover, .social a:focus { 
-    /*color: rgb(31, 52, 4); - dark green */ 
-    color: rgba(0,0,0,0.55);
-    text-decoration: none;
-	transition-property: opacity;
-	transition-duration: 0.3s;
-    }
-.social a:hover {opacity: 0.8;}
-
 /*---------------------------------------------------------------------
 
 	Boxes
@@ -221,46 +176,6 @@ box-shadow:         2px 2px 5px rgba(50, 50, 50, 0.75);
 	}
 
 div + .box2, div + box3 { margin: 5px !important;}
-
-.portfolio-tile { 
-    width: 200px;
-    height: 200px;
-    border: 1px solid rgba(0,0,0,0.5);
-	background: rgba(0,0,0,0.5);
-    display: inline-block;
-    margin-right: 10px;
-	margin-bottom: 10px;
-}
-
-.portfolio-tile:hover {
-	opacity: 0.8;
-	}
-
-.portfolio-tile div {
-    visibility: hidden;
-    display: inline-block;
-    height: 35px;
-    width: 100%;
-    top: 165px;
-    line-height: 25px;
-    position: relative;
-    background: rgba(0,0,0,0.6);
-	background-size: 100%;
-}
-
-.portfolio-tile:hover div {
-    visibility: visible;
-}
-
-span.portfolio-label { 
-	margin: auto 10px;
-    line-height: 35px;
-    height: 35px;
-    display: block;
-    vertical-align: middle;
-	color: #fff !important;
-}
-
 
 @media screen and (max-width: 1500px) {
     .main {
@@ -300,37 +215,6 @@ span.portfolio-label {
 	.box2 { width: 42%;}
 	.box3 { width: 25%;}
 }
-
-
-/*---------------------------------------------------------------------
-
-	Tables
-
-*/
-
-table {
-	width: 100%;
-	background-color: rgb(255,255,255);
-	color: rgba(0,0,0,0.9);
-	padding: 0;
-	border-spacing: 0;
-	/* padding: 1em; */
-	margin: 0.5em 0px !important;
-	overflow: auto;
-	}
-td {
-	margin: 0;
-	padding: 1em;
-	}
-thead { 
-	font-weight: bold; 
-	background: url(bg-pattern-green.png) repeat;
-	text-transform: uppercase;
-	}
-
-tbody tr:nth-child(even){
-	background-color: #efefef;
-	}
 
 /*---------------------------------------------------------------------
 
@@ -422,13 +306,6 @@ h1 {
 .nomobile { 
 	display: none !important;
 }
-.logo { 
-	height: 90px;
-	width: auto;
-	/*display: inline-block;
-	float: left;*/
-	margin: 5px auto 5px auto;
-}
 
 .sidebar { 
 	width: 100%;
@@ -485,15 +362,4 @@ ul.nav li:hover, ul.nav.sub li:hover {
 @media screen and (max-width: 320px) {
 	ul.nav li { margin: 0; padding: 0 0.3em;}
 	ul.nav li:hover, ul.nav.sub li:hover { padding: 0 0.3em; }
-}
-
-#adsense {
-  text-align: center;
-  display: block;
-}
-
-#adsense .adsbygoogle {
-
-  margin-left: auto;
-  margin-right: auto;
 }
