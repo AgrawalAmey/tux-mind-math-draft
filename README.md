@@ -6,7 +6,7 @@ Tux mind maths is a collection of games meant to provide productive diversions t
 ### Development Stack 
 Mind maths would be primarily built using HTML5 Canvas and JavaScript. Both web and hybrid mobile applications will be available at the same time, making it easier for people to use it across platforms. Building application in any of iOs, Android or Windows phone platform would not allow such flexibility.
 
-### Design discipline
+### Design Discipline
 Tux Mind Math will have a cartoonized alien theme which would be appealing to the children.
 
 Landing page
@@ -28,7 +28,7 @@ Version of traditional snakes game, where the there would be multiple meat balls
 This is suitable for problems slightly difficult than the duck hunt.
 ###### 2D temple run
 Turn to the direction marking the correct answer to the equation flashed.
-###### Biliards/Pool
+###### Billiards/Pool
 This would be meant for difficult problems, the gameplay being slow everyone would get enough time to solve.
 
 ### Progress

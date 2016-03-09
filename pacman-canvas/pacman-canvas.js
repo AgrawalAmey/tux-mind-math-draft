@@ -11,7 +11,7 @@ function pacmanGame() {
 	var mapConfig = "data/map.json";
 	var questionsData ="data/questions.json";
 	
-	var scale=Math.ceil(window.innerHeight*0.75/390);
+	var scale=window.innerHeight*0.75/390;
 	var canvas = $("#pacmanCanvas").get(0);
 	canvas.width*=scale;
 	canvas.height*=scale;
@@ -100,8 +100,8 @@ function pacmanGame() {
 		this.canvas = $("#pacmanCanvas").get(0);
 		this.wallColor = "Blue";
 
-		this.width = this.canvas.width;
-		this.height = this.canvas.height;
+		this.width = 540;
+		this.height = 390;
 
 		this.pillSize = 3;
 		this.powerpillSizeMin = 4;
@@ -631,10 +631,10 @@ function pacmanGame() {
 				this.posY += this.speed * this.dirY;
 				
 				// Check if out of canvas
-				if (this.posX >= game.width/scale-this.radius) this.posX = this.speed-this.radius;
-				if (this.posX <= 0-this.radius) this.posX = game.width/scale-this.speede-this.radius;
-				if (this.posY >= game.height/scale-this.radius) this.posY = this.speed-this.radius;
-				if (this.posY <= 0-this.radius) this.posY = game.height/scale-this.speed-this.radius;
+				if (this.posX >= game.width-this.radius) this.posX = this.speed-this.radius;
+				if (this.posX <= 0-this.radius) this.posX = game.width-this.speede-this.radius;
+				if (this.posY >= game.height-this.radius) this.posY = this.speed-this.radius;
+				if (this.posY <= 0-this.radius) this.posY = game.height-this.speed-this.radius;
 			}
 		}
 			
@@ -686,8 +686,8 @@ function pacmanGame() {
 					var pdirX = pdir.dirX == 0 ? - pdir.dirY : pdir.dirX;
 					var pdirY = pdir.dirY == 0 ? - pdir.dirX : pdir.dirY;
 					
-					var tX = (pacman.getGridPosX() + pdirX*4) % (game.width / pacman.radius*scale +1);
-					var tY = (pacman.getGridPosY() + pdirY*4) % (game.height / pacman.radius*scale +1);
+					var tX = (pacman.getGridPosX() + pdirX*4) % (game.width / pacman.radius +1);
+					var tY = (pacman.getGridPosY() + pdirY*4) % (game.height / pacman.radius +1);
 					break;
 				
 				// target: pacman
@@ -825,10 +825,10 @@ function pacmanGame() {
 				this.posX += this.speed * this.dirX;
 				this.posY += this.speed * this.dirY;
 				// Check if out of canvas
-				if (this.posX >= game.width/scale-this.radius) this.posX = this.speed*scale-this.radius*scale;
-				if (this.posX <= 0-this.radius) this.posX = game.width-this.speed*scale-this.radius*scale;
-				if (this.posY >= game.height/scale-this.radius) this.posY = this.speed*scale-this.radius*scale;
-				if (this.posY <= 0-this.radius) this.posY = game.height-this.speed*scale-this.radius*scale;
+				if (this.posX >= game.width-this.radius) this.posX = this.speed-this.radius;
+				if (this.posX <= 0-this.radius) this.posX = game.width-this.speed-this.radius;
+				if (this.posY >= game.height-this.radius) this.posY = this.speed-this.radius;
+				if (this.posY <= 0-this.radius) this.posY = game.height-this.speed-this.radius;
 				}
 			}
 		this.stop = function() { this.stop = true;}
@@ -952,10 +952,10 @@ function pacmanGame() {
 						// check if possible to change direction without getting stuck
 						var x = this.getGridPosX()+this.directionWatcher.get().dirX;
 						var y = this.getGridPosY()+this.directionWatcher.get().dirY;
-						if (x <= -1) x = game.width/(this.radius*2*scale)-1;
-						if (x >= game.width/(this.radius*2*scale)) x = 0;
-						if (y <= -1) x = game.height/(this.radius*2*scale)-1;
-						if (y >= game.heigth/(this.radius*2*scale)) y = 0;
+						if (x <= -1) x = game.width/(this.radius*2)-1;
+						if (x >= game.width/(this.radius*2)) x = 0;
+						if (y <= -1) x = game.height/(this.radius*2)-1;
+						if (y >= game.height/(this.radius*2)) y = 0;
 						var nextTile = game.map.posY[y].posX[x].type;
 						if (nextTile != "wall") {
 							this.setDirection(this.directionWatcher.get());
@@ -981,10 +981,10 @@ function pacmanGame() {
 				this.posY += this.speed * this.dirY;
 				
 				// Check if out of canvas
-				if (this.posX >= game.width-this.radius*scale) this.posX = 5-this.radius;
-				if (this.posX <= 0-this.radius*scale) this.posX = game.width/scale-5-this.radius;
-				if (this.posY >= game.height-this.radius*scale) this.posY = 5-this.radius;
-				if (this.posY <= 0-this.radius*scale) this.posY = game.height/scale-5-this.radius;
+				if (this.posX >= game.width-this.radius) this.posX = 5-this.radius;
+				if (this.posX <= 0-this.radius) this.posX = game.width-5-this.radius;
+				if (this.posY >= game.height-this.radius) this.posY = 5-this.radius;
+				if (this.posY <= 0-this.radius) this.posY = game.height-5-this.radius;
 			}
 			else this.dieAnimation();
 		}
