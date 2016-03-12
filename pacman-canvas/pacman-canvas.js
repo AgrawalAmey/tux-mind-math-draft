@@ -241,11 +241,6 @@ function pacmanGame() {
 			document.getElementById('question').innerHTML= 'Eat a powerpill';
 		}
 
-		this.showContent = function (id) {
-			$('.content').hide();
-			$('#'+id).show();
-		};
-
 		this.getLevelTitle = function() {
 			switch(this.level) {
 				case 1:
@@ -297,17 +292,15 @@ function pacmanGame() {
 				this.running = true;
 				this.closeMessage();
 				animationLoop();
-			}
-			else if (this.pause) {
+			}else if (this.pause) {
 				// stop timer
 				this.timer.stop();
 				this.pause = false;
 				this.closeMessage();
-				}
-			else {
+			}else {
 				this.showMessage("Pause","Click to Resume");
-				}
-			};
+			}
+		};
 
 		this.init = function (state) {
 			// reset timer if restart
@@ -508,7 +501,6 @@ function pacmanGame() {
 		this.refresh = function(h) {
 			$(h).html("Score: "+this.score);
 		};
-		
 	}
 	
 	// used to play sounds during the game
@@ -1068,11 +1060,6 @@ function pacmanGame() {
 
 	// Action starts here:
 	
-	function hideAdressbar() {
-		$("html").scrollTop(1);
-		$("body").scrollTop(1);
-	}
-	
 	$(document).ready(function() {	
 	
 		$.ajaxSetup({ mimeType: "application/json" });
@@ -1083,9 +1070,6 @@ function pacmanGame() {
 				}
 			}
 		});
-		
-		// Hide address bar
-		hideAdressbar();
 
 		/* -------------------- EVENT LISTENERS -------------------------- */
 
@@ -1253,8 +1237,8 @@ function pacmanGame() {
 					&& $('#game-content').is(':visible')
 					)	game.pauseResume();
 				break;
-			}
 		}
+	}
 }
 
 pacmanGame();
