@@ -140,6 +140,7 @@ function snake(){
 		};
 		this.move=function(){
 			var i;
+			var tail;
 			var nx = this.snakeArray[0].x;
 			var ny = this.snakeArray[0].y;
 	
@@ -157,15 +158,20 @@ function snake(){
 			//Create a new head instead of moving the tail
 			for(i=0;i<2;i++){
 				if(nx == food[i].x && ny == food[i].y){
-					var tail = {x: nx, y: ny};
-					game.score.add(10);
-					food[i].eaten=true;
-					game.setFood();
-					break;
+					if(food[i].number==game.currentQuestion.answer){
+						tail = {x: nx, y: ny};
+						game.score.add(10);
+						food[i].eaten=true;
+						game.setFood();
+						break;
+					}else{
+						game.init();
+						return;
+					}
 				}
 			}
 			if(i==2){
-					var tail = this.snakeArray.pop();
+					tail = this.snakeArray.pop();
 					tail.x = nx; tail.y = ny;
 			}		
 			this.snakeArray.unshift(tail);
