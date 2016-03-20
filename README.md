@@ -168,9 +168,9 @@ I am currently pressuring computer science at Birla Institute of Technology and 
 I have experience  with C, Java, HTML5, CSS along with SASS, Javascript, ES6, SQL. My primary development environment is Linux (Ubuntu 15.10).I have created many front-end projects (games, quizzes, pages) but some of my most challenging projects are with Department of Visual Media, BITS Pilani.
 
 To mention a few,
-- [Oasis 2015 Website](www.bits-oasis.org): The official website for cultural festival of BITS Pilani, received more than 20,000 sessions in 20 days.
-- [Apogee 2016 Website](www.bits-apogee.org): The official website for technical festival of BITS Pilani, received more than 25,000 sessions in 30 days.
-- [Lacuna 2016](www.bits-apogee.org): An online Sherlockian game, consisting of 12 micro-games was played by more than 500 users in span of 3 days.
+- [Oasis 2015 Website](http://www.bits-oasis.org): The official website for cultural festival of BITS Pilani, received more than 20,000 sessions in 20 days.
+- [Apogee 2016 Website](http://www.bits-apogee.org): The official website for technical festival of BITS Pilani, received more than 25,000 sessions in 30 days.
+- [Lacuna 2016](http://www.bits-apogee.org): An online Sherlockian game, consisting of 12 micro-games was played by more than 500 users in span of 3 days.
 
 #### 2.3 Graphic Design Experience 
 My primary tool for graphics design has been CorelDraw while I am familiar withAdobe Photoshop, Adobe Illustrator and Inkscape. I have served as lead graphic designer for all the projects mentioned above.I have also done many freelance projects which can be tracked on my [behance profile](https://www.behance.net/ameyagrawal). 
