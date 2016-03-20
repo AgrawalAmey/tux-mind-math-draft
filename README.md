@@ -14,7 +14,7 @@
   - Coding experience
   - Graphic Design Experience 
   - Educational Initiatives 
-  - Tux4KiDS and Me 
+  - Tux4Kids and Me 
   - Contact Details
 
 ## 1 Tux Mind Maths
