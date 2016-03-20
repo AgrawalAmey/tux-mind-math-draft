@@ -170,7 +170,7 @@ I have experience  with C, Java, HTML5, CSS along with SASS, Javascript, ES6, SQ
 To mention a few,
 - [Oasis 2015 Website](http://www.bits-oasis.org): The official website for cultural festival of BITS Pilani, received more than 20,000 sessions in 20 days.
 - [Apogee 2016 Website](http://www.bits-apogee.org): The official website for technical festival of BITS Pilani, received more than 25,000 sessions in 30 days.
-- [Lacuna 2016](http://www.bits-apogee.org): An online Sherlockian game, consisting of 12 micro-games was played by more than 500 users in span of 3 days.
+- [Lacuna 2016](http://www.bits-apogee.org/lacuna): An online Sherlockian game, consisting of 12 micro-games was played by more than 500 users in span of 3 days.
 
 #### 2.3 Graphic Design Experience 
 My primary tool for graphics design has been CorelDraw while I am familiar withAdobe Photoshop, Adobe Illustrator and Inkscape. I have served as lead graphic designer for all the projects mentioned above.I have also done many freelance projects which can be tracked on my [behance profile](https://www.behance.net/ameyagrawal). 
