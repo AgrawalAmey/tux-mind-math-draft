@@ -32,7 +32,7 @@ Turn to the direction marking the correct answer to the equation flashed.
 This would be meant for difficult problems, the gameplay being slow everyone would get enough time to solve.
 
 ### Progress
-Currently the pacman game has been developed, the design for the same is in progress. The questions and documentation are incomplete.
+Currently the pacman and snake game has been developed, the design for the same is in progress. The questions and documentation are incomplete.
 
 
 
