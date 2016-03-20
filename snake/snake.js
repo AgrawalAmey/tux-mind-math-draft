@@ -81,6 +81,10 @@ function snake(){
 				this.foodNumber++;
 			}
 		}
+		this.showContent = function (id) {
+			$('.content').hide();
+			$('#'+id).show();
+		};
 		this.init=function(){
 			this.direction = "right"; //default game.directionection
 			this.level=0;
@@ -251,6 +255,19 @@ function snake(){
 	//Game Pause on click
 	$('#canvas-container').click(function() {
 		if (!(game.gameOver == true))	game.pauseResume();
+	});
+	$(document).on('click','.button#instructions',function(event) {
+		game.showContent('instructions-content');
+	});
+	$(document).on('click','.button#newGame',function(event) {
+		game.newGame(0);
+	});
+	$(document).on('click','.button#instructions',function(event) {
+		   game.showContent('instructions-content');
+	});
+	// back button
+	$(document).on('click','.button#back',function(event) {
+		game.showContent('game-content');
 	});
 	game = new Game();
 	game.init();

@@ -55,6 +55,7 @@ div {
 
 .pull-right {
     float: right;
+    width: 75px;
 }
 
 .button {

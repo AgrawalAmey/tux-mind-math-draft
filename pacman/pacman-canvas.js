@@ -244,31 +244,23 @@ function pacmanGame() {
 		this.getLevelTitle = function() {
 			switch(this.level) {
 				case 1:
-					return '"The chase begins"';
-                    // activate chase / scatter switching
+					return '"Level One"';
 				case 2:
-					return '"Inky\s awakening"';
-                    // Inky starts leaving the ghost house
+					return '"Level Two"';
 				case 3:
-					return '"Clyde\s awakening"';
-                    // Clyde starts leaving the ghost house
+					return '"Level Three"';
 				case 4:
-					return '"need for speed"';
-                    // All the ghosts get faster from now on
+					return '"Level Four"';
                 case 5:
-                    return '"hunting season 1"';
-                    // TODO: No scatter mood this time
+                    return '"Level Five"';
                 case 6:
-                    return '"the big calm"';
-                    // TODO: Only scatter mood this time
+                    return '"Level Six"';
                 case 7:
-                    return '"hunting season 2"';
-                    // TODO: No scatter mood and all ghosts leave instantly
+                    return '"Level Seven"';
                 case 8:
-                    return '"ghosts on speed"';
-                    // TODO: Ghosts get even faster for this level
+                    return '"Level Eight"';
 				default:
-					return '"nothing new"';
+					return '"Nothing New"';
 			}
 		}
 
@@ -394,6 +386,11 @@ function pacmanGame() {
 				return true;
 			}
 		}
+
+		this.showContent = function (id) {
+			$('.content').hide();
+			$('#'+id).show();
+		};
 
 		this.check = function() {
 		if (game.allGhostDead() && game.running) {
