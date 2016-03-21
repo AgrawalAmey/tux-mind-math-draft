@@ -42,7 +42,12 @@ The back-end required for maintaining leaders-board will be written in Node.js u
 Tux Mind Math will be themed to intra-galatic space adventure which would be pleasing to children. All the graphics will be in SVG format for reducing memory overhead on the web and also provide seamless scaling across different screen sizes.
 
 #### 1.6 Current Progress 
-I have made two of the games proposed as demos, namely pacman and snake.Graphics for the same have not be developed yet. I have developed graphics for the game landing and level selection. Clone this repository and run a HTTP Server to try the games.
+I have made two of the games proposed as demos, namely pacman and snake.Graphics for the same have not be developed yet. I have developed graphics for the game landing and level selection.
+
+The links to demo versions of the games are:
+
+- [Pacman](http://agrawalamey.github.io/tux-mind-math-draft/pacman)
+- [Snake](http://agrawalamey.github.io/tux-mind-math-draft/pacman)
 
 Following are some exports from the UI design:
 
