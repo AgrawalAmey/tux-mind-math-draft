@@ -178,7 +178,7 @@ My primary tool for graphics design has been CorelDraw while I am familiar withA
 #### 2.4 Educational Initiatives 
 Me along with 8 others have started an educational initiative called ‘YUJ’ to help high school students identify and perceive their interests as career. The first edition  of our fest Concepticon received participation  from more than 1000 students. I have played  role as audit and tech coordinator. More details can be found on our facebook page.
 
-#### 2.5 Tux4KiDS and Me 
+#### 2.5 Tux4Kids and Me 
 This is the first time I am contributing to an open-source project. I have played tux math command as a kid, the philosophy tux4kids reflects is concurrent with mine and hence I feel excited to be a part of it.
 
 #### 2.6 Contact Details
