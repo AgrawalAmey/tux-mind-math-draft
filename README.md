@@ -36,7 +36,7 @@ The project will be primarily based on javascipt, HTML5. The web-app will be pac
 Each game will exist as individual ES6 module, which will be loaded with SystemJs module loader. These modules will use YUI style module pattern. 
 The styling will be based on SVGs and CSS (with SASS). Gulp will be used as the build tool along with JSPM for dependency management and bundling. 
 
-The back-end required for maintaining leaders-board will be written in Node.js using express framework. MySQL will be used as database server.
+The back-end required for maintaining leaders-board will be written in Node.js using express framework. SQLite will be used as database server.
 
 #### 1.5 Graphics
 Tux Mind Math will be themed to intra-galatic space adventure which would be pleasing to children. All the graphics will be in SVG format for reducing memory overhead on the web and also provide seamless scaling across different screen sizes.
