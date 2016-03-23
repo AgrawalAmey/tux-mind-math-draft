@@ -47,7 +47,7 @@ I have made two of the games proposed as demos, namely pacman and snake.Graphics
 The links to demo versions of the games are:
 
 - [Pacman](http://agrawalamey.github.io/tux-mind-math-draft/pacman)
-- [Snake](http://agrawalamey.github.io/tux-mind-math-draft/pacman)
+- [Snake](http://agrawalamey.github.io/tux-mind-math-draft/snake)
 
 Following are some exports from the UI design:
 
