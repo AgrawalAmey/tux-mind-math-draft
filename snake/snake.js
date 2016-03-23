@@ -26,7 +26,7 @@ function snake(){
 		this.running = false;
 		this.pause = true;
 		this.score=new Score();
-		this.refreshRate=60;
+		this.timeOut=90;
 		this.newGame = function(option) {
 			var r=1;
 			if(!option){
@@ -198,7 +198,7 @@ function snake(){
 		};
 		this.draw=function(){
 			renderCell(this.x, this.y,"red");
-			ctx.font = cw+"px"+" Geometr415 Blk BT";
+			ctx.font = cw+"px"+" Montserrat";
 			ctx.fillStyle = "white";
 			ctx.fillText(this.number,cw*(this.x+0.25),cw*(this.y+0.85));
 		};
@@ -231,7 +231,7 @@ function snake(){
 			game.check();
 			snake.move();	
 		}
-		setTimeout(animationLoop, game.refreshRate);		
+		setTimeout(animationLoop, game.timeOut);		
 	}
 	//the keyboard controls
 	$(document).keydown(function(e){

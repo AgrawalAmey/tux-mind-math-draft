@@ -36,7 +36,7 @@ The project will be primarily based on javascipt, HTML5. The web-app will be pac
 Each game will exist as individual ES6 module, which will be loaded with SystemJs module loader. These modules will use YUI style module pattern. 
 The styling will be based on SVGs and CSS (with SASS). Gulp will be used as the build tool along with JSPM for dependency management and bundling. 
 
-The back-end required for maintaining leaders-board will be written in Node.js using express framework. MySQL will be used as database server.
+The back-end required for maintaining leaders-board will be written in Node.js using express framework. SQLite will be used as database server.
 
 #### 1.5 Graphics
 Tux Mind Math will be themed to intra-galatic space adventure which would be pleasing to children. All the graphics will be in SVG format for reducing memory overhead on the web and also provide seamless scaling across different screen sizes.
@@ -183,7 +183,7 @@ My primary tool for graphics design has been CorelDraw while I am familiar withA
 #### 2.4 Educational Initiatives 
 Me along with 8 others have started an educational initiative called ‘YUJ’ to help high school students identify and perceive their interests as career. The first edition  of our fest Concepticon received participation  from more than 1000 students. I have played  role as audit and tech coordinator. More details can be found on our facebook page.
 
-#### 2.5 Tux4KiDS and Me 
+#### 2.5 Tux4Kids and Me 
 This is the first time I am contributing to an open-source project. I have played tux math command as a kid, the philosophy tux4kids reflects is concurrent with mine and hence I feel excited to be a part of it.
 
 #### 2.6 Contact Details
